@@ -90,6 +90,71 @@ body {
   /*color: #4286f4;*/
 }
 
+.affiliation-logos {
+  margin-top: 1rem;
+  padding-left: 11.0rem;
+}
+
+.affiliation-logos a {
+  display: inline-block;
+  margin: 0 0.75rem;
+}
+
+.affiliation-logos img {
+  height: 60px;
+}
+
+.affiliation-logos img.cadlab-logo {
+  transform: scale(0.40);
+  transform-origin: left center;
+}
+
+.qualitative-carousel {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto 1.5rem;
+}
+
+.qualitative-slide {
+  display: none;
+}
+
+.qualitative-slide.is-active {
+  display: block;
+}
+
+.qualitative-carousel img {
+  max-width: 100%;
+  height: auto;
+}
+
+.qualitative-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.9rem;
+  font-size: 1.4rem;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.qualitative-carousel:hover .qualitative-nav {
+  opacity: 1;
+}
+
+.qualitative-prev {
+  left: 0.5rem;
+}
+
+.qualitative-next {
+  right: 0.5rem;
+}
+
 .publication-video {
     position: relative;
     width: 100%;

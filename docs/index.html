@@ -61,6 +61,18 @@
             <span class="author-block"><sup>2</sup>Dept. of Artificial Intelligence, Chung-Ang University, Seoul, Korea</span>
           </div>
 
+          <div class="affiliation-logos has-text-centered">
+            <a href="https://www.cau.ac.kr" target="_blank" rel="noopener">
+              <img src="./static/images/CAU_symbol.webp" alt="Chung-Ang University logo" />
+            </a>
+            <a href="https://www.vilab.cau.ac.kr/" target="_blank" rel="noopener">
+              <img src="./static/images/vilab-logo.png" alt="VILab logo" />
+            </a>
+            <a href="https://algomalgo.notion.site/CAD-Lab-8c88a7ab65754e018d3e070ee92d79c5" target="_blank" rel="noopener">
+              <img class="cadlab-logo" src="./static/images/cadlab-logo.png" alt="CAD Lab logo" />
+            </a>
+          </div>
+
           <div class="column has-text-centered">
             <div class="publication-links">
               <!-- PDF Link. -->
@@ -123,7 +135,10 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <img id="teaser" src="./static/images/teaser.png" alt="Teaser image" style="width: 100%; height: auto;"/>
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
       <h2 class="subtitle has-text-centered">
         Water Scene Gaussian Splatting (WSGS) accurately reconstructs scenes with water surface refraction.
       </h2>
@@ -132,38 +147,13 @@
 </section>
 
 
-<section class="hero is-light is-small">
+<!-- <section class="hero is-light is-small">
   <div class="hero-body">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
+
     </div>
   </div>
-</section>
+</section> -->
 
 
 <section class="section">
@@ -172,15 +162,24 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
+        <div class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="./static/images/teaser.png" alt="Teaser image" style="max-width: 80%; height: auto;" />
+        </div>
         <div class="content has-text-justified">
           <p>
             Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
             presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
-            transparent water surfaces. To address this, we propose a novel framework for reconstructing scenes involving 
+            transparent water surfaces. 
+          </p>
+          <p>  
+            To address this, we propose a novel framework for reconstructing scenes involving 
             both reflection and refraction caused by water surfaces. The water surface is modeled as a trainable plane, and 
             2D Gaussian ray tracing is applied to account for refraction through the water. We extend 2D Gaussian Splatting 
             by introducing a soft mask parameter and a dual set of Gaussian primitives, which handle both reflected and refracted 
-            effects. Our method achieves state-of-the-art performance on newly constructed water surface datasets, including both 
+            effects. 
+          </p>
+          <p>  
+            Our method achieves state-of-the-art performance on newly constructed water surface datasets, including both 
             synthetic and real scenes, and significantly outperforms prior approaches in water-interacting regions. Furthermore, 
             we demonstrate the editability of our model by manipulating the index of refraction to suppress or modify refractive 
             effects, enabling scene transformations into different liquids.
@@ -190,17 +189,83 @@
     </div>
     <!--/ Abstract. -->
 
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+        <div class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="./static/images/framework.png"
+               alt="Framework image"
+               style="max-width: 140%; height: auto; position: relative; left: 50%; transform: translateX(-50%);" />
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
+            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
+            transparent water surfaces. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+
+    <!-- Quantitative. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Quantitative Comparison</h2>
+        <div class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="./static/images/quantitative.png"
+               alt="Quantitative Comparison image"
+               style="max-width: 120%; height: auto; position: relative; left: 50%; transform: translateX(-50%);" />
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
+            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
+            transparent water surfaces. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Quantitative. -->
+
+
+    <!-- Qualitative. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Qualitative Results</h2>
+        <div id="qualitative-carousel" class="qualitative-carousel">
+          <div class="qualitative-slide is-active">
+            <img src="./static/images/qualitative1.png" alt="Qualitative result 1"
+                 style="max-width: 140%; height: auto; position: relative; left: 50%; transform: translateX(-50%);" />
+          </div>
+          <div class="qualitative-slide">
+            <img src="./static/images/qualitative2.png" alt="Qualitative result 2"
+                 style="max-width: 140%; height: auto; position: relative; left: 50%; transform: translateX(-50%);" />
+          </div>
+          <button class="qualitative-nav qualitative-prev">&#8249;</button>
+          <button class="qualitative-nav qualitative-next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+    <!--/ Qualitative. -->
+
+
     <!-- Paper video. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div class="publication-video" style="display: flex; align-items: center; justify-content: center;">
+          <p><br>Video will be available soon.</p>
         </div>
       </div>
     </div>
     <!--/ Paper video. -->
+
+
+
+
+
   </div>
 </section>
 

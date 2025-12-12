@@ -30,12 +30,12 @@ $(document).ready(function() {
     });
 
     var options = {
-			slidesToScroll: 1,
-			slidesToShow: 3,
-			loop: true,
-			infinite: true,
-			autoplay: false,
-			autoplaySpeed: 3000,
+      slidesToScroll: 1,
+      slidesToShow: 1,
+      loop: true,
+      infinite: true,
+      autoplay: false,
+      autoplaySpeed: 3000,
     }
 
 		// Initialize all div with carousel class
@@ -74,5 +74,38 @@ $(document).ready(function() {
     $('#interpolation-slider').prop('max', NUM_INTERP_FRAMES - 1);
 
     bulmaSlider.attach();
+
+    // Simple qualitative image slider
+    (function() {
+      var container = document.getElementById('qualitative-carousel');
+      if (!container) return;
+
+      var slides = container.querySelectorAll('.qualitative-slide');
+      if (!slides.length) return;
+
+      var current = 0;
+      function show(index) {
+        slides[current].classList.remove('is-active');
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add('is-active');
+      }
+
+      slides[0].classList.add('is-active');
+
+      var prevBtn = container.querySelector('.qualitative-prev');
+      var nextBtn = container.querySelector('.qualitative-next');
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+          show(current - 1);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+          show(current + 1);
+        });
+      }
+    })();
 
 })
