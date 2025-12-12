@@ -2,7 +2,7 @@
 
 # Through the Water: Refractive Gaussian Splatting for Water Surface Scenes
 
-[**Yeonghun Yoon***](https://github.com/yyhosmium64) · [**Hojoon Jung***](https://github.com/yyhosmium64) · [**Jaeyoon Lee***](https://github.com/yyhosmium64) · [**Taegwan Kim***](https://github.com/yyhosmium64) · [**Gyuhyun Kim***](https://github.com/yyhosmium64) · [**Jongwon Choi**](https://)<sup>&dagger;</sup> 
+[**Yeonghun Yoon***](https://sites.google.com/vilab.cau.ac.kr/yyhos/) · [**Hojoon Jung***](https://sites.google.com/view/hjjung-homepage/%ED%99%88) · [**Jaeyoon Lee***](https://sites.google.com/vilab.cau.ac.kr/jaeyoonlee) · [**Taegwan Kim***](https://algomalgo.notion.site/CAD-Lab-8c88a7ab65754e018d3e070ee92d79c5) · [**Gyuhyun Kim***](https://algomalgo.notion.site/CAD-Lab-8c88a7ab65754e018d3e070ee92d79c5) · [**Jongwon Choi**](https://scholar.google.co.kr/citations?user=F3u9qHcAAAAJ&hl)<sup>&dagger;</sup> 
 <br>
 
 [![paper](https://img.shields.io/badge/Paper-WSGS-b31b1b?logo=adobe&logoColor=fff)](#)
