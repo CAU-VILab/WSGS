@@ -37,6 +37,7 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">Through the Water: Refractive Gaussian Splatting<br>for Water Surface Scenes</h1>
+          <h2 class="subtitle is-size-4 has-text-centered"><br><b>AAAI 2026</b></h2>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://sites.google.com/vilab.cau.ac.kr/yyhos/">Yeonghun Yoon</a><sup>1</sup>,</span>
@@ -52,7 +53,7 @@
               <a href="https://algomalgo.notion.site/CAD-Lab-8c88a7ab65754e018d3e070ee92d79c5">Gyuhyun Kim</a><sup>1</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.co.kr/citations?user=F3u9qHcAAAAJ&hl=ko">Jongwon Choi</a><sup>1,2</sup>,
+              <a href="https://scholar.google.co.kr/citations?user=F3u9qHcAAAAJ&hl=ko">Jongwon Choi</a><sup>1,2*</sup>,
             </span>
           </div>
 
@@ -220,9 +221,13 @@
         </div>
         <div class="content has-text-justified">
           <p>
-            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
-            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
-            transparent water surfaces. 
+           We first focused on the water regions to evaluate how well our framework and the baseline methods 
+           handle view-dependent effects, specifically reflection and refraction on water surfaces. As represented 
+           in the "water" columns of table above, even for both the synthetic and real scenes, our method consistently 
+           outperformed all baseline methods for the water regions. To assess overall scene quality, we extended the evaluation 
+           to entire images, including both water and static regions. This tests the model’s ability to reconstruct realistic scenes 
+           beyond water effects. As shown in the "entire" columns of table above, our method outperformed others in most cases, demonstrating 
+           robustness across both regions.
           </p>
         </div>
       </div>
@@ -248,9 +253,10 @@
         </div>
         <div class="content has-text-justified">
           <p>
-            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
-            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
-            transparent water surfaces. 
+           Qualitatively, as shown in figures above, the baseline approaches that either ignored view-dependent effects 
+           or modeled only reflections often produced blurry results with visible visual artifacts in the water regions. 
+           In contrast, our method produced sharper and higher-quality reconstructions, successfully capturing the detailed 
+           appearance of water surfaces.
           </p>
         </div>
       </div>
@@ -296,11 +302,11 @@
         </div>
         <div class="content has-text-justified">
           <p>
-            Since the refracted Gaussian is explicitly trained to model refraction, 
-            adjusting IOR enables the simulation of different liquids or the removal 
-            of water by eliminating both refraction and reflection. As shown in figure above, 
-            increasing the IOR to 1.46 results in oil-like refraction, whereas setting the IOR 
-            to the same value as air and disabling reflection effectively removes the water surface.
+           We created and collected two datasets named <i>Water Synthetic</i> and <i>Water Real</i>. 
+           The Water Synthetic dataset was produced by constructing scenes in Autodesk Maya, 
+           adding water dynamics via physical simulation, and rendering the outputs with the Arnold renderer. 
+           The Water Real dataset was collected with a Galaxy S25 Ultra in full HD resolution. Each scene was recorded 
+           from at least three heights to make refractive differences clear, providing about 200–400 images per scene. 
           </p>
         </div>
       </div>
