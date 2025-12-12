@@ -1,0 +1,10 @@
+__pycache__/
+.idea/
+.ipynb_checkpoints/
+*.ipynb
+*.dot
+*.svg
+*.eps
+*.ply
+.DS_Store
+README_no_upload.md
