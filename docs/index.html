@@ -269,9 +269,38 @@
         </div>
         <div class="content has-text-justified">
           <p>
-            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
-            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
-            transparent water surfaces. 
+            Since the refracted Gaussian is explicitly trained to model refraction, 
+            adjusting IOR enables the simulation of different liquids or the removal 
+            of water by eliminating both refraction and reflection. As shown in figure above, 
+            increasing the IOR to 1.46 results in oil-like refraction, whereas setting the IOR 
+            to the same value as air and disabling reflection effectively removes the water surface.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Small IOR editing videos. -->
+    <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Datasets</h2>
+        <div class="columns">
+          <div class="column is-half">
+            <video controls muted autoplay loop playsinline style="max-width: 100%; height: auto;">
+              <source src="./static/videos/water_real.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-half">
+            <video controls muted autoplay loop playsinline style="max-width: 100%; height: auto;">
+              <source src="./static/videos/water_synthetic.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            Since the refracted Gaussian is explicitly trained to model refraction, 
+            adjusting IOR enables the simulation of different liquids or the removal 
+            of water by eliminating both refraction and reflection. As shown in figure above, 
+            increasing the IOR to 1.46 results in oil-like refraction, whereas setting the IOR 
+            to the same value as air and disabling reflection effectively removes the water surface.
           </p>
         </div>
       </div>
