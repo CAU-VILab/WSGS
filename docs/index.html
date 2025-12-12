@@ -86,7 +86,7 @@
                   <span>Paper</span>
                 </a>
               </span>
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="#"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -94,7 +94,7 @@
                   </span>
                   <span>arXiv</span>
                 </a>
-              </span>
+              </span> -->
               <!-- Video Link. -->
               <span class="link-block">
                 <a href="#"
@@ -117,7 +117,7 @@
               </span>
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="#"
+                <a href="https://forms.gle/3G84ABSGmTHLnbpW9"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
@@ -164,7 +164,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="has-text-centered" style="margin-bottom: 1.5rem;">
-          <img src="./static/images/teaser.png" alt="Teaser image" style="max-width: 80%; height: auto;" />
+          <img src="./static/images/teaser.png" alt="Teaser image" style="max-width: 100%; height: auto;" />
         </div>
         <div class="content has-text-justified">
           <p>
@@ -201,14 +201,50 @@
         </div>
         <div class="content has-text-justified">
           <p>
-            Scenes with water surfaces present a significant challenge for Gaussian Splatting due to the simultaneous 
-            presence of refraction and reflection, as well as the difficulty of accurately estimating the geometry of 
-            transparent water surfaces. 
+           We introduce <b>Water Scene Gaussian Splatting (WSGS)</b>, which is a novel framework that enables reconstruction 
+           in scenes with refraction caused by water surfaces. We initialize the <b>trainable plane</b> using results obtained 
+           from Structure-from-Motion (SfM) and define the water region on this plane by using a soft mask. Reflected and 
+           refracted rays are then computed according to Snell's law with respect to this plane, after which we perform <b>2D 
+           Gaussian ray tracing</b> along these rays. The reflected and refracted colors are then blended using <b>Fresnel equations</b>, 
+           enabling accurate rendering of the water region. Finally, we combine the water region color with the non-water region 
+           color from 2DGS using the <b>soft mask</b> to create the final image. We further regularize the soft mask using a <b>pseudo mask 
+           loss</b> derived from depth cues of the base Gaussian and the trainable plane, which reduces imperfect separation between water 
+           and non-water regions.
           </p>
         </div>
       </div>
     </div>
     <!--/ Method. -->
+
+    <!-- Dataset. -->
+    <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Datasets</h2>
+        <div class="columns">
+          <div class="column is-half">
+            <video muted autoplay loop playsinline style="max-width: 100%; height: auto;">
+              <source src="./static/videos/water_real.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-half">
+            <video muted autoplay loop playsinline style="max-width: 100%; height: auto;">
+              <source src="./static/videos/water_synthetic.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+           We created and collected two datasets named <i>Water Synthetic</i> and <i>Water Real</i>. 
+           The Water Synthetic dataset was produced by constructing scenes in Autodesk Maya, 
+           adding water dynamics via physical simulation, and rendering the outputs with the Arnold renderer. 
+           The Water Real dataset was collected with a Galaxy S25 Ultra in full HD resolution. Each scene was recorded 
+           from at least three heights to make refractive differences clear, providing about 200–400 images per scene. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Dataset. -->
+
 
     <!-- Quantitative. -->
     <div class="columns is-centered has-text-centered">
@@ -280,33 +316,6 @@
             of water by eliminating both refraction and reflection. As shown in figure above, 
             increasing the IOR to 1.46 results in oil-like refraction, whereas setting the IOR 
             to the same value as air and disabling reflection effectively removes the water surface.
-          </p>
-        </div>
-      </div>
-    </div>
-    <!-- Small IOR editing videos. -->
-    <div class="columns is-centered has-text-centered" style="margin-top: 1.5rem;">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Datasets</h2>
-        <div class="columns">
-          <div class="column is-half">
-            <video controls muted autoplay loop playsinline style="max-width: 100%; height: auto;">
-              <source src="./static/videos/water_real.mp4" type="video/mp4">
-            </video>
-          </div>
-          <div class="column is-half">
-            <video controls muted autoplay loop playsinline style="max-width: 100%; height: auto;">
-              <source src="./static/videos/water_synthetic.mp4" type="video/mp4">
-            </video>
-          </div>
-        </div>
-        <div class="content has-text-justified">
-          <p>
-           We created and collected two datasets named <i>Water Synthetic</i> and <i>Water Real</i>. 
-           The Water Synthetic dataset was produced by constructing scenes in Autodesk Maya, 
-           adding water dynamics via physical simulation, and rendering the outputs with the Arnold renderer. 
-           The Water Real dataset was collected with a Galaxy S25 Ultra in full HD resolution. Each scene was recorded 
-           from at least three heights to make refractive differences clear, providing about 200–400 images per scene. 
           </p>
         </div>
       </div>
