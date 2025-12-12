@@ -29,8 +29,9 @@ body {
 
 
 .publication-title {
+  white-space: nowrap;
+  word-break: normal;
 }
-
 .publication-banner {
   max-height: parent;
 
