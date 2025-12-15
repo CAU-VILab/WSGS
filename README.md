@@ -16,11 +16,11 @@
 
 ***News***:
 
-- 25.04.16: Writing Code...
-- 25.08.01: Submitted on AAAI 2026
+- 25.04.16 : Writing code...
+- 25.08.01 : Submitted to AAAI 2026
 - 25.11.08 : AAAI 2026 Main Technical Track accepted
 - 25.12.13 : Added project page
-- 25.12.14 : Making README.md & refactoring code now...(Maybe finished in January)
+- 25.12.14 : Writing README.md & refactoring code now... (may be finished in January)
 
 
 ## Installation
