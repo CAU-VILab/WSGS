@@ -23,6 +23,163 @@
 - 25.12.14 : Making README.md & refactoring code now...(Maybe finished in January)
 
 
+## Installation
+```shell
+# Create a new conda environment
+conda create -n wsgs "python=3.11" -y
+conda activate wsgs
+
+# Install PyTorch (CUDA 11.8)
+pip install torch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 --index-url https://download.pytorch.org/whl/cu118 
+
+# Install pip dependencies
+cat requirements-dev.txt | sed -e '/^\s*-.*$/d' -e '/^\s*#.*$/d' -e '/^\s*$/d' | awk '{split($0, a, "#"); if (length(a) > 1) print a[1]; else print $0;}' | awk '{split($0, a, "@"); if (length(a) > 1) print a[2]; else print $0;}' | xargs -n 1 pip install
+
+pip install -e . --no-build-isolation --no-deps
+
+# Install submodules
+git submodule update --init --recursive
+
+# Install the 2D Gaussian Tracer & 2D Gaussian rasterizers 
+# from EnvGS (https://github.com/zju3dv/EnvGS)
+pip install -v submodules/diff-surfel-tracing
+pip install submodules/diff-surfel-rasterizations/diff-surfel-rasterization-wet submodules/diff-surfel-rasterizations/diff-surfel-rasterization-wet-ch05 submodules/diff-surfel-rasterizations/diff-surfel-rasterization-wet-ch07
+
+# Install StableNormal(https://github.com/Stable-X/StableNormal) for monocular normal estimation
+pip install -r submodules/StableNormal/requirements.txt
+```
+
+
+## Dataset
+
+
+Directory structure :
+
+```shell
+data/water_real/fishbowl_v02
+│── extri.yml
+│── intri.yml
+├── images
+│   ├── 00
+│   │   ├── 000000.jpg
+│   │   ├── 000001.jpg
+│   │   ...
+│   │   ...
+│   └── 01
+│   ...
+└── normal
+    ├── 00
+    │   ├── 000000.jpg
+    │   ├── 000001.jpg
+    │   ...
+    │   ...
+    └── 01
+    ...
+```
+
+
+```yaml
+# Content of configs/datasets/water_real/fishbowl_v02.yaml
+configs: configs/datasets/water_real/wsgs.yaml
+
+dataloader_cfg:
+    dataset_cfg: &dataset_cfg
+        ratio: 0.5
+        data_root: data/datasets/water_real/fishbowl_v02
+        view_sample: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 
+                    106, 108, 110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 200, 
+                    202, 204, 206, 208, 210, 212, 214, 216, 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 238, 240, 242, 244, 246, 248, 
+                    250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282, 284, 286, 288, 290, 292, 294, 296, 
+                    298, 300, 302, 304, 306, 308, 310, 312, 314, 316, 318, 320, 322, 324, 326, 328, 330, 332, 334, 336, 338, 340, 342, 344, 
+                    346, 348, 350, 352, 354, 356, 358, 360, 362, 364, 366, 368, 370, 372, 374, 376, 378, 380, 382, 384, 386, 388, 390, 392, 
+                    394, 396, 398, 400, 402, 404, 406, 408, 410, 412, 414, 416, 418, 420, 422, 424, 426, 428, 430, 432, 434, 436, 438, 440, 
+                    442, 444, 446, 448, 450, 452, 454, 456, 458, 460, 462, 464, 466, 468, 470, 472, 474, 476, 478, 480, 482, 484, 486, 488, 
+                    490, 492, 494, 496, 498, 500]
+val_dataloader_cfg:
+    dataset_cfg:
+        <<: *dataset_cfg
+        view_sample: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 109, 111, 
+                    113, 115, 117, 119, 121, 123, 125, 127, 129, 131, 133, 135, 137, 139, 141, 201, 203, 205, 207, 209, 211, 213, 215, 217, 219, 221, 223, 
+                    225, 227, 229, 231, 233, 235, 237, 239, 241, 243, 245, 247, 249, 251, 253, 255, 257, 259, 261, 263, 265, 267, 269, 271, 273, 275, 277, 279, 
+                    281, 283, 285, 287, 289, 291, 293, 295, 297, 299, 301, 303, 305, 307, 309, 311, 313, 315, 317, 319, 321, 323, 325, 327, 329, 331, 333, 335, 
+                    337, 339, 341, 343, 345, 347, 349, 351, 353, 355, 357, 359, 361, 363, 365, 367, 369, 371, 373, 375, 377, 379, 381, 383, 385, 387, 389, 391, 
+                    393, 395, 397, 399, 401, 403, 405, 407, 409, 411, 413, 415, 417, 419, 421, 423, 425, 427, 429, 431, 433, 435, 437, 439, 441, 443, 445, 447, 
+                    449, 451, 453, 455, 457, 459, 461, 463, 465, 467, 469, 471, 473, 475, 477, 479, 481, 483, 485, 487, 489, 491, 493, 495, 497, 499]
+model_cfg:
+    sampler_cfg:
+        preload_gs: data/datasets/water_real/fishbowl_v02/sparse/0/points3D.ply
+        spatial_scale: 5.930263676977028
+        # Environment Gaussian
+        env_preload_gs: data/datasets/water_real/fishbowl_v02/envs/points3D.ply
+        env_bounds: [[-7.140890789217361, 1.1771738839981318, -7.674651231798872], [9.847743611337476, 9.918000233277503, 4.248896983072468]]
+        refracted_preload_gs: data/datasets/water_real/fishbowl_v02/refracted/points3D.ply
+        refracted_bounds: [[-7.140890789217361, 1.1771738839981318, -7.674651231798872], [9.847743611337476, 9.918000233277503, 4.248896983072468]]
+        white_bg: False
+        initial_plane_offset: -2.15 #-5.76 #-1.46384576 #-0.89434369 #-1.13? 2.3
+        initial_plane_normal: [-0.03054, -0.99845, -0.04661] # used for water plane init
+```
+
+
+
+
+
+Next, you need to create an experiment file that specifies the model and dataset to be used.
+
+```yaml
+# configs/exps/wsgs/water_real/fishbowl_v02.yaml
+configs:
+    - configs/base.yaml # default arguments for the whole codebase
+    - configs/models/wsgs.yaml # model configuration
+    - configs/datasets/water_real/fishbowl_v02.yaml # dataset usage configuration
+
+model_cfg:
+    supervisor_cfg:
+        perc_loss_start_iter: 45000 # less iterations for faster training
+    sampler_cfg:
+        max_gs: 2000000
+runner_cfg:
+    epochs: 140
+    
+
+# prettier-ignore
+exp_name: {{fileBasenameNoExtension}}
+```
+
+
+
+
+## Usage
+### Training
+Once data preprocessing is complete, run the following command to start training:
+```shell
+# Train on the Water Real dataset
+evc-train -c configs/exps/wsgs/water_real/fishbowl_v02.yaml exp_name=wsgs/water_real/bucket # bucket
+evc-train -c configs/exps/wsgs/water_real/fishbowl_v02.yaml exp_name=wsgs/water_real/fishbowl # fishbowl
+evc-train -c configs/exps/wsgs/water_real/basin.yaml exp_name=wsgs/water_real/basin_real # basin real
+
+# Train on the Water Synthetic dataset
+evc-train -c configs/exps/wsgs/water_synthetic/swimming_pool_clear.yaml exp_name=wsgs/water_synthetic/swimming_pool # swimming pool
+evc-train -c configs/exps/wsgs/water_synthetic/basin_clear.yaml exp_name=wsgs/water_synthetic/basin # basin
+evc-train -c configs/exps/wsgs/water_synthetic/pond_v06.yaml exp_name=wsgs/water_synthetic/pond # pond
+evc-train -c configs/exps/wsgs/water_synthetic/kitchen_v06.yaml exp_name=wsgs/water_synthetic/kitchen # kitchen
+```
+
+
+### Rendering
+Once training is finished, run the following command to perform rendering:
+```shell
+# Testing with input views and evaluating metrics
+evc-test -c configs/exps/wsgs/water_real/fishbowl_v02.yaml # Only rendering some selected testing views
+
+# Rendering a rotating novel view path
+evc-test -c configs/exps/wsgs/water_real/fishbowl_v02.yaml,configs/specs/cubic.yaml # Render a cubic novel view path, simple interpolation
+evc-test -c configs/exps/wsgs/water_real/fishbowl_v02.yaml,configs/specs/spiral.yaml # Render a spiral novel view path
+evc-test -c configs/exps/wsgs/water_real/fishbowl_v02.yaml,configs/specs/orbit.yaml # Render an orbit novel view path
+
+# GUI Rendering
+evc-gui -c configs/exps/wsgs/water_real/fishbowl_v02.yaml viewer_cfg.window_size=540,960
+```
+
 
 
 ## Acknowledgments
@@ -37,6 +194,9 @@ Thank you to the following prior works that provided the basis for conducting th
 
 
 ## Citation
+
+If you find this code useful for your research, please cite us using the following BibTeX entry.
+
 ```
 @article{yoon2026wsgs,
   title={Through the Water: Refractive Gaussian Splatting for Water Surface Scenes},
