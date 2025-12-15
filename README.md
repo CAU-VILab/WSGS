@@ -38,7 +38,7 @@ Thank you to the following prior works that provided the basis for conducting th
 
 ## Citation
 ```
-@article{xie2024envgs,
+@article{yoon2026wsgs,
   title={Through the Water: Refractive Gaussian Splatting for Water Surface Scenes},
   author={Yeonghun Yoon, Hojoon Jung, Jaeyoon Lee, Taegwan Kim, Gyuhyun Kim, Jongwon Choi},
   journal={AAAI},
