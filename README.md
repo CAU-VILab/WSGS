@@ -51,9 +51,11 @@ pip install -r submodules/StableNormal/requirements.txt
 
 
 ## Dataset
+The Water Real and Water Synthetic datasets can be requested via the Dataset Request link above and are available for academic use only.
+The following section describes the data preprocessing procedure.
+### Dataset Preparation
 
-
-Directory structure :
+To run the code, Structure-from-Motion must first be performed, and the resulting data must then be converted into the easyvolcap format. The final directory structure is shown below:
 
 ```shell
 data/water_real/fishbowl_v02
@@ -77,6 +79,37 @@ data/water_real/fishbowl_v02
     ...
 ```
 
+COLMAP을 돌리기 및 경로 설정 내용 추가해야함@@@@@@
+
+Once Structure-from-Motion using COLMAP has been completed and the results have been placed in the appropriate directory, the data can be converted into the EasyVolCap format using `wsgs_scripts/water_dataset_to_easyvolcap.sh`.
+
+```shell
+# Ex) Convert Water Real fishbowl data to easyvolcap format
+
+# Define the dataset name and scene name
+dataset=water_real
+scene=basin
+colmap_root=data/datasets/original/$dataset
+easyvolcap_root=data/datasets/$dataset
+
+
+#2. Run COLMAP: once you have images stored in `data/datasets/original/water_synthetic/fishbowl_v02/images/*.jpg`
+python scripts/colmap/run_colmap.py --data_root $colmap_root/$scene --images images --use_gpu --colmap_matcher sequential
+
+# # 3. COLMAP to EasyVolcap: convert the colmap format dataset to EasyVolcap format 
+# # `--colmap colmap/colmap_sparse/0` is the default COLMAP sparse output directory if you are using the `run_colmap.py` script in the previous step, you can change it to your own COLMAP sparse output directory
+python scripts/preprocess/colmap_to_easyvolcap.py --data_root $colmap_root --output $easyvolcap_root --scenes $scene --colmap colmap/colmap_sparse/0
+
+# # 4. Run StableNormal: prepare the monocular normal maps for supervision
+python submodules/StableNormal/run.py --data_root $easyvolcap_root --scenes $scene
+
+# 5. Metadata: prepare the scene-specific dataset configs parameters for WSGS
+# `--eval` is used for standard evaluation, namely use [0, None, 8] as the testing view sample
+python scripts/preprocess/tools/compute_metadata.py --data_root $easyvolcap_root --scenes $scene --eval
+```
+
+### Configurations
+For data stored in the easyvolcap format, a configuration file must be created for each dataset. This file specifies the data path, the views used for training and evaluation, as well as the values described below.
 
 ```yaml
 # Content of configs/datasets/water_real/fishbowl_v02.yaml
@@ -120,6 +153,16 @@ model_cfg:
 ```
 
 
+
+#### Required Configurations
+
+There are some specific dataset-related parameters required by *WSGS*, you can get env_bounds parameters after running preprocess script above.
+
++ `model_cfg.sampler_cfg.env_bounds=[[..., ..., ...], [..., ..., ...]]`: this the calculated 3d bounding box of the COLMAP sparse points., used for the environment Gaussian initialization.
++ `refracted_preload_gs` is specified in a similar manner to the above, and `refracted_bounds` is set to be identical to env_bounds.
+
++ For `initial_plane_offset`, the value is determined based on the statistics obtained from `colmap_error_heatmap.py`.
++ And for `initial_plane_normal`, an appropriate value is either explored using the COLMAP model orientation aligner or manually determined and specified.
 
 
 
