@@ -192,7 +192,7 @@ model_cfg:
         refracted_preload_gs: data/datasets/water_real/fishbowl_v02/refracted/points3D.ply
         refracted_bounds: [[-7.140890789217361, 1.1771738839981318, -7.674651231798872], [9.847743611337476, 9.918000233277503, 4.248896983072468]]
         white_bg: False
-        initial_plane_offset: -2.15 #-5.76 #-1.46384576 #-0.89434369 #-1.13? 2.3
+        initial_plane_offset: -2.15 # used for water height init
         initial_plane_normal: [-0.03054, -0.99845, -0.04661] # used for water plane init
 ```
 
