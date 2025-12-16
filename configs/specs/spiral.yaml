@@ -1,0 +1,17 @@
+# configs: configs/specs/orbit.yaml
+# val_dataloader_cfg:
+#     dataset_cfg:
+#         interp_type: SPIRAL
+#         interp_cfg:
+#             smoothing_term: 5.0 # use this to actually activate the interpolation dataset
+
+
+configs: configs/specs/orbit.yaml
+val_dataloader_cfg:
+    dataset_cfg:
+        interp_type: SPIRAL
+        interp_cfg:
+            n_rots: 1.0           # 1바퀴만 회전
+            zrate: 0.0            # 높이 변화 없음
+            xyz_ratio: [1.0, 1.0, 0.0]  # Z축 움직임 완전 제거
+            radius_ratio: 1.0

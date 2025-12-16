@@ -1,0 +1,7 @@
+configs: configs/specs/orbit.yaml
+val_dataloader_cfg:
+    dataset_cfg:
+        n_render_views: 600
+        interp_type: CUBIC
+        interp_cfg:
+            smoothing_term: 5.0 # use this to actually activate the interpolation dataset

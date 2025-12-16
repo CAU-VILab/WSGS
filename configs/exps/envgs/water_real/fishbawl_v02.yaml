@@ -1,0 +1,16 @@
+configs:
+    - configs/base.yaml # default arguments for the whole codebase
+    - configs/models/envgs.yaml # envgs model configuration   실험이니까 모델은 일단 envgs로.
+    - configs/datasets/water_real/fishbawl_v02.yaml # dataset usage configuration
+
+model_cfg:
+    supervisor_cfg:
+        perc_loss_start_iter: 45000 # less iterations for faster training
+    sampler_cfg:
+        max_gs: 2000000 #
+
+runner_cfg:
+    epochs: 120 #120
+
+# prettier-ignore
+exp_name: {{fileBasenameNoExtension}}

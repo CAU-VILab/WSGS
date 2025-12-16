@@ -1,0 +1,19 @@
+gradio>=4.32.1
+gradio-imageslider>=0.0.20
+pygltflib
+
+trimesh
+imageio
+imageio-ffmpeg
+Pillow
+einops
+
+spaces
+accelerate
+diffusers>=0.28.0
+matplotlib
+scipy
+
+transformers
+xformers==0.0.27 --index-url https://download.pytorch.org/whl/cu118
+

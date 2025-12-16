@@ -1,0 +1,145 @@
+# Default config for WSGS
+runner_cfg:
+    visualizer_cfg:
+        types: ['RENDER', 'DEPTH', 'ALPHA', 'NORMAL', 'SURFACE_NORMAL',
+                'SPECULAR', 'DIFFUSE', 'REFLECTION','REFRACTED', 'REFRACTION', 'PLANE']
+    optimizer_cfg:
+        lr: 0.05 # add default lr to params of other modules
+        eps: 1.e-15
+        lr_table:
+            _xyz: 0.00016
+            _features_dc: 0.0025
+            _features_rest: 0.000125
+            _opacity: 0.05
+            _scaling: 0.005
+            _rotation: 0.001
+            _specular: 0.01
+            _refraction: 0.01
+            _plane_offset: 0.001 #0.005 #0.0005 #0.001
+    scheduler_cfg:
+        type: NoopLR
+    epochs: 80
+    ep_iter: 500
+    save_latest_ep: 1
+    save_ep: 80
+    eval_ep: 20 #1 : 500 iter
+    log_interval: 1
+    record_images_to_tb: False # save disk space
+
+model_cfg:
+    chunkify_rays: False # for now, no ray chunking for Gaussian
+    let_user_handle_input: True # let the user handle the output and input
+    network_cfg:
+        type: NoopNetwork # no network for this
+        _delete_: True
+    renderer_cfg:
+        type: NoopRenderer
+    sampler_cfg:
+        type: WSGSSampler
+        xyz_lr_scheduler: # same as the 2DGS code
+            lr_init: 0.00016
+            lr_final: 0.0000016
+            lr_delay_mult: 0.01
+            max_steps: 30000
+
+        env_xyz_lr_scheduler: # same as the 2DGS code
+            lr_init: 0.00016
+            lr_final: 0.000016
+            lr_delay_mult: 0.01
+            max_steps: 30000 # max iter - env_densify_until_iter
+            start_steps: 18000 # start steps for environment Gaussian. Set this value same as render_reflection_start_iter
+
+        refracted_xyz_lr_scheduler: # same as the 2DGS code
+            lr_init: 0.00016
+            lr_final: 0.000016
+            lr_delay_mult: 0.01
+            max_steps: 30000 # max iter - refracted_densify_until_iter
+            start_steps: 18000 # start steps for refracted Gaussian. Set this value same as render_refraction_start_iter
+
+
+        # plane_offset_lr_scheduler: # plane offset learning rate scheduler
+        plane_offset_lr_scheduler:
+            lr_init: 0.001           # 초기 학습률
+            lr_steps: [4000, 5000, 6000, 7000] #[5000,7000,9000,11000,13000,15000,17000,19000,21000]  # decay 지점들
+            lr_decay_factor: 0.7    # 각 step에서 감소 비율
+            lr_final: 0.0001       # 최소 학습률 (이보다 낮아지지 않음)
+            start_steps: 18000        # 감소 시작하는 시점
+            
+        # Reflection
+        render_reflection: True
+        render_reflection_start_iter: 18000
+        # Refraction
+        render_refraction: True
+        render_refraction_start_iter: 18000
+        # Base Gaussian
+        sh_deg: 3
+        sh_start_iter: 0
+        specular_channels: 1
+        densify_until_iter: 55000 #30000
+        normal_prop_until_iter: 1 #24000 #dif lr scheduler
+        color_sabotage_until_iter: 52000 #sabotage after densification finished. code
+        prune_visibility: True
+        min_weight_threshold: 0.1
+        # Environment Gaussian
+        use_optix_tracing: True
+        acc_filtering_start_iter: -1
+        specular_filtering_start_iter: -1 # do not use this
+        env_sh_deg: 3
+        env_sh_start_iter: 0
+        env_densify_until_iter: 55000
+        env_densification_interval: 500 #200
+        env_opacity_reset_interval: 6000 #3000
+        env_densify_grad_threshold: 0.0001 # / 2
+        env_prune_visibility: True
+        env_min_weight_threshold: 0.1
+        #Refracted Gaussian
+        refracted_sh_deg: 3
+        refracted_sh_start_iter: 0
+        refracted_densify_until_iter: 55000
+        refracted_densification_interval: 200 #100
+        refracted_opacity_reset_interval: 3000
+        refracted_densify_grad_threshold: 0.0001 # / 2
+        refracted_prune_visibility: True
+        refracted_min_weight_threshold: 0.1
+
+        plane_offset_freeze_iter: 30000 #35000 #55000
+        
+        #TBD
+
+    supervisor_cfg:
+        supervisor_cfgs:
+            - type: VolumetricVideoSupervisor
+            - type: WSGSSupervisor
+        img_loss_type: L1
+        img_loss_weight: 0.8
+        ssim_loss_weight: 0.2
+        gs_dist_loss_weight: 0.0 # do not use this
+        gs_norm_loss_weight: 0.04
+        gs_norm_loss_start_iter: 0
+        use_dpt_scale_gs_norm_loss: True
+        norm_loss_weight: 0.01 # use monocular normal prior 0.01
+        norm_loss_start_iter: 0
+        norm_loss_until_iter: 6000 #use monocular normal prior very short time
+        use_dpt_scale_norm_loss: True
+        perc_loss_weight: 0.01 # use perceptual loss
+        perc_loss_start_iter: 21000
+
+        # pseudo_mask Loss 설정
+        pseudo_mask_loss_weight: 0.05  # 시작값, 실험을 통해 조정 
+        pseudo_mask_loss_start_iter: 30000  # 반사/굴절 안정 후 시작
+        pseudo_mask_loss_until_iter: 70000  # 사용 종료 시점
+
+dataloader_cfg: &dataloader_cfg
+    dataset_cfg: &dataset_cfg
+        n_rays: -1
+        use_normals: True # use monocular normal prior
+    batch_sampler_cfg: &batch_sampler_cfg
+        type: BatchSampler
+        batch_size: 1
+
+val_dataloader_cfg: # we see the term "dataloader" a one word?
+    <<: *dataloader_cfg
+    dataset_cfg:
+        <<: *dataset_cfg
+    batch_sampler_cfg:
+        <<: *batch_sampler_cfg
