@@ -21,7 +21,8 @@
 - 25.08.01 : Submitted to AAAI 2026
 - 25.11.08 : AAAI 2026 Main Technical Track accepted
 - 25.12.13 : Added project page
-- 25.12.14 : Writing README.md & refactoring code now... (may be finished in January)
+- 25.12.14 : Writing README.md & refactoring code now...
+- 25.12.16 : The CPU of the computer we were using for training broke down, so refactoring is taking longer than expected.
 
 
 ## Installation
