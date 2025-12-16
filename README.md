@@ -13,14 +13,7 @@
 
 ![teaser](assets/imgs/teaser.png)
 
-<div align="center">
-  <video src="assets/videos/teaser.mp4"
-         controls
-         loop
-         muted
-         style="max-width: 100%;">
-  </video>
-</div>
+
 
 ***News***:
 
