@@ -25,6 +25,9 @@
 
 ## Installation
 ```shell
+# Clone the submodules
+git submodule update --init --recursive
+
 # Create a new conda environment
 conda create -n wsgs "python=3.11" -y
 conda activate wsgs
