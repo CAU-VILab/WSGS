@@ -13,6 +13,14 @@
 
 ![teaser](assets/imgs/teaser.png)
 
+<div align="center">
+  <video src="assets/videos/teaser.mp4"
+         controls
+         loop
+         muted
+         style="max-width: 100%;">
+  </video>
+</div>
 
 ***News***:
 
@@ -79,9 +87,53 @@ data/water_real/fishbowl_v02
     ...
 ```
 
-COLMAP을 돌리기 및 경로 설정 내용 추가해야함@@@@@@
 
-Once Structure-from-Motion using COLMAP has been completed and the results have been placed in the appropriate directory, the data can be converted into the EasyVolCap format using `wsgs_scripts/water_dataset_to_easyvolcap.sh`.
+First, extract and save frames from the videos using ffmpeg.
+Move to the directory containing the videos, then run:
+```shell
+mkdir images
+ffmpeg -f concat -safe 0 -i list.txt -r 8 -q:v 1 ./images/%06d.jpg -hide_banner -loglevel error
+```
+The -r option controls the frame rate and determines how many frames are extracted per second. \
+Here, -r 8 means that 8 frames per second are extracted.
+
+The list.txt file is used to concatenate and process multiple videos sequentially, and has the following format:
+```shell
+#list.txt
+file 'fishbowl_1.mp4'
+file 'fishbowl_2.mp4'
+file 'fishbowl_3.mp4'
+...
+```
+
+Next, run COLMAP to obtain `cameras.bin`, `images.bin`, `points3D.bin`, `project.ini`, and `colmap.db` (in our case, we used COLMAP GUI).
+Place these files, along with the `images` directory used for COLMAP, according to the directory structure specified below. (If COLMAP does not work properly, it may be helpful to use COLMAP’s masking feature to prevent feature matching in water regions.)
+```shell
+data/original/water_real/fishbowl_v02
+├── colmap
+│   ├── colmap.db
+│   └── colmap_sparse
+│       └── 0
+│           ├── cameras.bin
+│           ├── images.bin
+│           ├── points3D.bin
+│           └── project.ini
+└── images
+    ├── 000001.jpg
+    ├── 000002.jpg
+    ├── ...
+    └── ...
+```
+
+Then, update the values below in project.ini so that they match the actual paths.
+```shell
+#data/original/water_real/fishbowl_v02/colmap/colmap_sparse/project.ini
+database_path=data/datasets/original/water_real/fishbowl_v02/colmap/colmap.db
+image_path=data/datasets/original/water_real/fishbowl_v02/images
+```
+
+
+Once Structure-from-Motion using COLMAP has been completed and the results have been placed in the appropriate directory, the data can be converted into the easyvolcap format using `wsgs_scripts/water_dataset_to_easyvolcap.sh`.
 
 ```shell
 # Ex) Convert Water Real fishbowl data to easyvolcap format
@@ -91,7 +143,6 @@ dataset=water_real
 scene=basin
 colmap_root=data/datasets/original/$dataset
 easyvolcap_root=data/datasets/$dataset
-
 
 #2. Run COLMAP: once you have images stored in `data/datasets/original/water_synthetic/fishbowl_v02/images/*.jpg`
 python scripts/colmap/run_colmap.py --data_root $colmap_root/$scene --images images --use_gpu --colmap_matcher sequential
@@ -104,7 +155,6 @@ python scripts/preprocess/colmap_to_easyvolcap.py --data_root $colmap_root --out
 python submodules/StableNormal/run.py --data_root $easyvolcap_root --scenes $scene
 
 # 5. Metadata: prepare the scene-specific dataset configs parameters for WSGS
-# `--eval` is used for standard evaluation, namely use [0, None, 8] as the testing view sample
 python scripts/preprocess/tools/compute_metadata.py --data_root $easyvolcap_root --scenes $scene --eval
 ```
 
@@ -207,6 +257,18 @@ evc-train -c configs/exps/wsgs/water_synthetic/pond_v06.yaml exp_name=wsgs/water
 evc-train -c configs/exps/wsgs/water_synthetic/kitchen_v06.yaml exp_name=wsgs/water_synthetic/kitchen # kitchen
 ```
 
+### Evaluation
+The rendering results and quantitative evaluation metrics for the test views can be found in the `RENDER/` directory and the `metrics.json` file under the experiment directory specified by `exp_name`.
+
+To perform quantitative evaluation only on *water regions*, the pseudo masks generated during *WSGS* training must be used.
+These pseudo mask images are stored in the `SPECULAR/` directory, and water region evaluation can be performed using `mask_eval.py`.
+```shell
+python mask_eval.py --data_root ./data/result/wsgs/water_real/fishbowl --odd_camera_only 
+```
++ `--data_root` : Path to the experiment result directory that contains the RENDER/, SPECULAR/, and metrics.json files.
++ `--odd_camera_only` : If set, evaluation is performed only on test views captured from odd-indexed cameras.
+
+If you want to evaluate only the water regions for results from models other than WSGS (e.g., 2DGS, EnvGS, etc.), you can copy the SPECULAR/ directory from a WSGS result directory and reuse it for evaluation.
 
 ### Rendering
 Once training is finished, run the following command to perform rendering:
@@ -222,6 +284,7 @@ evc-test -c configs/exps/wsgs/water_real/fishbowl_v02.yaml,configs/specs/orbit.y
 # GUI Rendering
 evc-gui -c configs/exps/wsgs/water_real/fishbowl_v02.yaml viewer_cfg.window_size=540,960
 ```
+
 
 
 
